@@ -1,116 +1,83 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import { LogOut, Settings } from "lucide-react";
+import { useUi } from "../context/UiContext";
+import { MenuButton } from "./Buttons";
 
 const Header = () => {
+  const dropdownRef = useRef(null);
+  const { setSidebarOpen } = useUi();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const location = useLocation();
+  const base = location.pathname.split("/")[1];
+
+  const handleClickOutside = (e) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      setDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
-    <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 ">
       <div className="px-3 py-3  lg:px-5 lg:pl-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center justify-start rtl:justify-end">
-            <button
-              data-drawer-target="logo-sidebar"
-              data-drawer-toggle="logo-sidebar"
-              aria-controls="logo-sidebar"
-              type="button"
-              className="inline-flex bg-white items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 light:hover:bg-gray-700 dark:focus:ring-gray-600 "
-            >
-              <span className="sr-only">Open sidebar</span>
-              <svg
-                className="w-6 h-6"
-                aria-hidden="true"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  clipRule="evenodd"
-                  fillRule="evenodd"
-                  d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
-                ></path>
-              </svg>
-            </button>
-            <a href="https://flowbite.com" className="flex ms-2 md:me-24">
-              <img
-                src="https://flowbite.com/docs/images/logo.svg"
-                className="h-8 me-3"
-                alt="FlowBite Logo"
-              />
-              <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
-                Flowbite
+            <div className="md:hidden">
+              <MenuButton method={setSidebarOpen} />
+            </div>
+            <a href="#" className="flex mx-2">
+              <span className="self-center italic font-semibold whitespace-nowrap md:min-w-52">
+                Template v2.0
               </span>
             </a>
-          </div>
-          <div className="flex items-center">
-            <div className="flex items-center ms-3">
-              <div>
-                <button
-                  type="button"
-                  className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                  aria-expanded="false"
-                  data-dropdown-toggle="dropdown-user"
-                >
-                  <span className="sr-only">Open user menu</span>
-                  <img
-                    className="w-8 h-8 rounded-full"
-                    src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                    alt="user"
-                  />
-                </button>
-              </div>
-              <div
-                className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-sm shadow-sm dark:bg-gray-700 dark:divide-gray-600"
-                id="dropdown-user"
-              >
-                <div className="px-4 py-3" role="none">
-                  <p className="text-sm text-gray-900 dark:text-white" role="none">
-                    Neil Sims
-                  </p>
-                  <p
-                    className="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
-                    role="none"
-                  >
-                    neil.sims@flowbite.com
-                  </p>
-                </div>
-                <ul className="py-1" role="none">
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                      role="menuitem"
-                    >
-                      Dashboard
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                      role="menuitem"
-                    >
-                      Settings
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                      role="menuitem"
-                    >
-                      Earnings
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                      role="menuitem"
-                    >
-                      Sign out
-                    </a>
-                  </li>
-                </ul>
-              </div>
+            <div className="hidden md:block">
+              <MenuButton method={setSidebarOpen} />
             </div>
+          </div>
+          <div className="relative" ref={dropdownRef}>
+            <div
+              onClick={() => setDropdownOpen((prev) => !prev)}
+              className="flex items-center ms-3 cursor-pointer hover:underline gap-3"
+            >
+              <div className="rounded-full w-7 h-7 md:w-8 md:h-8 border bg-gray-200"></div>{" "}
+              <p className="text-sm md:text-base">Lastname, Firstname I.</p>
+            </div>
+            {dropdownOpen && (
+              <div className=" absolute right-2 w-56 bg-white rounded-md z-50 shadow-lg border">
+                <div className="px-4 py-2 flex flex-col gap-1">
+                  <span className="text-gray-800 text-base overflow-hidden text-center">
+                    Firstname Lastname
+                  </span>
+                  <span className="text-gray-600 text-xs overflow-hidden text-center">
+                    sample.email@email.com
+                  </span>
+                </div>
+                <div className="px-4 py-2 hover:bg-gray-200 cursor-pointer flex flex-col gap-1 border-t-1 border-t-gray-200">
+                  <NavLink
+                    className={"flex flex-row items-center gap-2"}
+                    to={`/settings`}
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    <Settings size={16} />
+                    <span>Settings</span>
+                  </NavLink>
+                </div>
+                <div
+                  className="px-4 py-2 hover:bg-gray-200 cursor-pointer flex flex-col gap-1 border-t-1 border-t-gray-200"
+                  // onClick={handleLogout}
+                >
+                  <div className="flex flex-row items-center gap-2">
+                    <LogOut size={15} />
+                    <span>Sign out</span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

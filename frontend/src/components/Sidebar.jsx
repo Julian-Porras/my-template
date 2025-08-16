@@ -1,52 +1,77 @@
+import { NavLink, useLocation } from "react-router-dom";
+import { useUi } from "../context/UiContext";
+import { useEffect, useRef } from "react";
 
 const Sidebar = () => {
+  const { isSidebarOpen, setSidebarOpen } = useUi();
+
+  const location = useLocation();
+  const sidebarRef = useRef(null);
+  const base = location.pathname.split("/")[1];
+  let sidebarHeader = "information system";
+  let routes = [];
+
+  const handleClickInside = (e) => {
+    if (window.innerWidth >= 768) return; // only for small screens
+    if (sidebarRef.current && sidebarRef.current.contains(e.target)) {
+      setSidebarOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickInside);
+    return () => document.removeEventListener("mousedown", handleClickInside);
+  }, []);
   return (
-    <aside
-      id="logo-sidebar"
-      className="fixed top-0 left-0 z-40 w-64 h-screen pt-24 transition-transform -translate-x-full border-r border-gray-200 sm:translate-x-0 bg-white dark:bg-gray-800 dark:border-gray-700"
-      aria-label="Sidebar"
-    >
-      <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-        <ul className="space-y-2 font-medium">
-          <li>
-            <a
-              href="#"
-              className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-            >
-              <svg
-                className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M10.707 1.293a1 1 0 00-1.414 0l-8 8a1 1 0 001.414 1.414L3 10.414V17a1 1 0 001 1h3a1 1 0 001-1v-3h2v3a1 1 0 001 1h3a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-8-8z" />
-              </svg>
-              <span className="ms-3">Dashboard</span>
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-            >
-              <svg
-                className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 2a4 4 0 00-4 4v1H5a2 2 0 00-2 2v7a2 2 0 002 2h10a2 2 0 002-2v-7a2 2 0 00-2-2h-1V6a4 4 0 00-4-4zM8 6a2 2 0 114 0v1H8V6zm-3 3h10v7H5V9z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span className="ms-3">Users</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </aside>
+    <>
+      <aside
+        className={`fixed top-0 left-0 z-40 w-60 h-screen border-r pt-20 border-gray-200 bg-white transition-transform duration-200 ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <p className="text-start my-2 mx-4 text-gray-400 uppercase text-xs">
+          {sidebarHeader}
+        </p>
+        <div className="h-full px-3 pb-4 overflow-y-auto bg-white">
+          <ul className="space-y-2 font-medium">
+            {routes
+              .filter((route) => route.meta?.label)
+              .map((route) => {
+                const Icon = route.meta?.icon;
+                const hasChildren = Array.isArray(route.children);
+                return (
+                  <div key={route.meta.label}>
+                    <NavLink
+                      to={`/${base}/${route.path}`}
+                      className={({ isActive }) =>
+                        `flex items-center p-2 text-gray-900 rounded-md ${
+                          isActive
+                            ? `bg-sky-950 text-white`
+                            : `hover:bg-gray-200 `
+                        }`
+                      }
+                      onClick={() => {
+                        if (window.innerWidth < 768) {
+                          setSidebarOpen(() => false);
+                        }
+                      }}
+                    >
+                      {Icon && <Icon className="w-5 h-5 " />}
+                      <span className="ms-3 ">{route.meta.label}</span>
+                    </NavLink>
+                  </div>
+                );
+              })}
+          </ul>
+        </div>
+      </aside>
+      <div
+        ref={sidebarRef}
+        className={`transition-opacity duration-100 backdrop-blur-[2px] bg-black/10 fixed inset-0 z-30 md:hidden ${
+          isSidebarOpen ? "block" : "hidden"
+        }`}
+      ></div>
+    </>
   );
 };
 
