@@ -4,7 +4,7 @@ const UiContext = createContext();
 
 export const UiProvider = ({ children }) => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
-  const [isSidebarSubmenuOpen, setSidebarSubmenuOpen] = useState(true);
+  const [isSidebarSubmenuOpen, setSidebarSubmenuOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -20,7 +20,14 @@ export const UiProvider = ({ children }) => {
   }, []);
 
   return (
-    <UiContext.Provider value={{ isSidebarOpen, setSidebarOpen }}>
+    <UiContext.Provider
+      value={{
+        isSidebarOpen,
+        setSidebarOpen,
+        isSidebarSubmenuOpen,
+        setSidebarSubmenuOpen,
+      }}
+    >
       {children}
     </UiContext.Provider>
   );

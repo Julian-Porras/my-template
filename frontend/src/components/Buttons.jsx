@@ -15,7 +15,9 @@ export function PrimaryButton({ onClick, label, style, disabled }) {
   return (
     <button
       onClick={onClick}
-      className={`w-full bg-[var(--primary-color)] text-white py-2 rounded-md hover:bg-[var(--primary-hover-color)] transition-colors duration-200 ${style} ${disabled ? "opacity-50 cursor-progress" : ""}`}
+      className={`w-full bg-[var(--primary-color)] text-white py-2 rounded-md hover:bg-[var(--primary-hover-color)] transition-colors duration-200 ${style} ${
+        disabled ? "opacity-50 cursor-progress" : ""
+      }`}
       disabled={disabled}
     >
       {label}

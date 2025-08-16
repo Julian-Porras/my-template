@@ -1,19 +1,13 @@
 import { createBrowserRouter } from "react-router-dom";
 import AppLayout from "../layouts/AppLayout";
-import { lazy, Suspense } from "react";
+import { lazy } from "react";
 import MainLayout from "../layouts/MainLayout";
+import { MainRouter } from "./MainRouter";
+import { LazyWrapper } from "../components/LazyWrapper";
 
 const LoginPage = lazy(() => import("../pages/auth/Login"));
-const DashboardPage = lazy(() => import("../pages/Dashboard"));
-const SettingsPage = lazy(() => import("../pages/Settings"));
 const NotFound = lazy(() => import("../util/404"));
 const NotPermitted = lazy(() => import("../util/403"));
-
-const LazyWrapper = (Component) => (
-  <Suspense fallback={null}>
-    <Component />
-  </Suspense>
-);
 
 const router = createBrowserRouter([
   {
@@ -21,26 +15,7 @@ const router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       { path: "login", element: LazyWrapper(LoginPage) },
-      {
-        path: "dashboard",
-        element: <MainLayout />,
-        children: [
-          {
-            index: true,
-            element: LazyWrapper(DashboardPage),
-          },
-        ],
-      },
-      {
-        path: "settings",
-        element: <MainLayout />,
-        children: [
-          {
-            index: true,
-            element: LazyWrapper(SettingsPage),
-          },
-        ],
-      },
+      { element: <MainLayout />, children: MainRouter },
       {
         path: "*",
         name: "NotFound",
