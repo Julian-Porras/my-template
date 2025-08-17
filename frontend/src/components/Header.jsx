@@ -6,7 +6,7 @@ import { MenuButton } from "./Buttons";
 
 const Header = () => {
   const dropdownRef = useRef(null);
-  const { setSidebarOpen } = useUi();
+  const { setSidebarOpen, resetSubmenus } = useUi();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const location = useLocation();
   const base = location.pathname.split("/")[1];
@@ -61,7 +61,10 @@ const Header = () => {
                   <NavLink
                     className={"flex flex-row items-center gap-2"}
                     to={`/settings`}
-                    onClick={() => setDropdownOpen(false)}
+                    onClick={() => {
+                      setDropdownOpen(false);
+                      resetSubmenus(); 
+                    }}
                   >
                     <Settings size={16} />
                     <span>Settings</span>

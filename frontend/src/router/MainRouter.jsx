@@ -19,11 +19,6 @@ export const MainRouter = [
     element: LazyWrapper(SettingsPage),
   },
   {
-    path: "sample",
-    element: LazyWrapper(SamplePage),
-    meta: { label: "Sample Page", icon: Database },
-  },
-  {
     meta: { label: "Dropdown", icon: Database },
     children: [
       {
@@ -41,21 +36,31 @@ export const MainRouter = [
         element: LazyWrapper(SamplePage),
         meta: { label: "Submenu 3" },
       },
-      // {
-      //   path: "submenu4",
-      //   element: LazyWrapper(SamplePage),
-      //   meta: { label: "Submenu 4" },
-      // },
-      // {
-      //   path: "submenu5",
-      //   element: LazyWrapper(SamplePage),
-      //   meta: { label: "Submenu 5" },
-      // },
-      // {
-      //   path: "submenu6",
-      //   element: LazyWrapper(SamplePage),
-      //   meta: { label: "Submenu 6" },
-      // },
+      {
+        path: "submenu4",
+        element: LazyWrapper(SamplePage),
+        meta: { label: "Submenu 4" },
+      },
+    ],
+  },
+  {
+    meta: { label: "Dropdown 2", icon: Database },
+    children: [
+      {
+        path: "submenu5",
+        element: LazyWrapper(SamplePage),
+        meta: { label: "Submenu 5" },
+      },
+      {
+        path: "submenu6",
+        element: LazyWrapper(SamplePage),
+        meta: { label: "Submenu 6" },
+      },
+      {
+        path: "submenu7",
+        element: LazyWrapper(SamplePage),
+        meta: { label: "Submenu 7" },
+      },
     ],
   },
   {

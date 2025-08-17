@@ -1,15 +1,16 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { useUi } from "../context/UiContext";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MainRouter } from "../router/MainRouter";
-import { ChevronUp } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 const Sidebar = () => {
   const {
     isSidebarOpen,
     setSidebarOpen,
     isSidebarSubmenuOpen,
-    setSidebarSubmenuOpen,
+    toggleSubmenu,
+    resetSubmenus,
   } = useUi();
 
   const location = useLocation();
@@ -47,7 +48,7 @@ const Sidebar = () => {
               .map((route) => {
                 const Icon = route.meta?.icon;
                 const hasChildren = Array.isArray(route.children);
-                const isOpen = isSidebarSubmenuOpen;
+                const isOpen = isSidebarSubmenuOpen[route.meta.label];
 
                 return (
                   <div key={route.meta.label}>
@@ -55,8 +56,8 @@ const Sidebar = () => {
                       <>
                         {/* Parent Menu Item */}
                         <div
-                          className="flex justify-between items-center p-2 text-gray-700 rounded-md cursor-pointer hover:bg-gray-100 transition-colors"
-                          onClick={() => setSidebarSubmenuOpen((prev) => !prev)}
+                          className="flex justify-between items-center p-2 text-gray-700 rounded-md cursor-pointer hover:bg-gray-100 transition-colors mb-2"
+                          onClick={() => toggleSubmenu(route.meta.label)}
                         >
                           <div className="flex items-center gap-2">
                             {Icon && (
@@ -66,21 +67,15 @@ const Sidebar = () => {
                               {route.meta.label}
                             </span>
                           </div>
-                          <ChevronUp
+                          <ChevronDown
                             className={`w-5 h-5 text-gray-500 transform transition-transform duration-200 ${
-                              isSidebarSubmenuOpen ? "rotate-180" : ""
+                              isOpen ? "rotate-180" : ""
                             }`}
                           />
                         </div>
 
                         {/* Submenu Items */}
-                        <div
-                          className={`pl-4 flex flex-col gap-2 py-2 border-gray-200 overflow-x-hidden transition-all duration-100 ease-in-out ${
-                            isSidebarSubmenuOpen
-                              ? "max-h-48 opacity-100"
-                              : "max-h-0 opacity-0"
-                          }`}
-                        >
+                        <Submenu isOpen={isOpen}>
                           {route.children.map((child) => (
                             <NavLink
                               key={child.path}
@@ -89,14 +84,19 @@ const Sidebar = () => {
                                 `block py-2 px-3 rounded-md transition-colors ${
                                   isActive
                                     ? "bg-[var(--secondary-color)] text-white"
-                                    : "text-gray-600 hover:bg-gray-100"
+                                    : "text-gray-600 hover:bg-gray-200"
                                 }`
                               }
+                              onClick={() => {
+                                if (window.innerWidth < 768) {
+                                  setSidebarOpen(false);
+                                }
+                              }}
                             >
                               {child.meta?.label}
                             </NavLink>
                           ))}
-                        </div>
+                        </Submenu>
                       </>
                     ) : (
                       /* Single NavLink stays same */
@@ -110,6 +110,7 @@ const Sidebar = () => {
                           }`
                         }
                         onClick={() => {
+                          resetSubmenus(); // Close all submenus
                           if (window.innerWidth < 768) {
                             setSidebarOpen(false);
                           }
@@ -134,6 +135,44 @@ const Sidebar = () => {
         }`}
       ></div>
     </>
+  );
+};
+
+const Submenu = ({ isOpen, children }) => {
+  const ref = useRef(null);
+  const [height, setHeight] = useState("0px");
+  const [isScrollable, setIsScrollable] = useState(false);
+
+  useEffect(() => {
+    if (ref.current) {
+      const contentHeight = ref.current.scrollHeight;
+      const maxHeight = 300; // ~10 items, adjust as needed
+
+      if (isOpen) {
+        // If content is taller than maxHeight, limit and enable scroll
+        if (contentHeight > maxHeight) {
+          setHeight(`${maxHeight}px`);
+          setIsScrollable(true);
+        } else {
+          setHeight(`${contentHeight}px`);
+          setIsScrollable(false);
+        }
+      } else {
+        setHeight("0px");
+      }
+    }
+  }, [isOpen, children]);
+
+  return (
+    <div
+      ref={ref}
+      style={{ height }}
+      className={`ml-4 flex flex-col gap-2 rounded-md bg-gray-100 transition-all duration-200 ease-in-out overflow-hidden ${
+        isScrollable ? "overflow-y-auto pr-1" : ""
+      }`}
+    >
+      {children}
+    </div>
   );
 };
 

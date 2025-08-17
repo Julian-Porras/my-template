@@ -4,7 +4,15 @@ const UiContext = createContext();
 
 export const UiProvider = ({ children }) => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
-  const [isSidebarSubmenuOpen, setSidebarSubmenuOpen] = useState(false);
+  const [isSidebarSubmenuOpen, setSidebarSubmenuOpen] = useState({});
+
+  const toggleSubmenu = (key) => {
+    setSidebarSubmenuOpen((prev) => {
+      const isCurrentlyOpen = !!prev[key];
+      return isCurrentlyOpen ? {} : { [key]: true }; // close all others
+    });
+  };
+  const resetSubmenus = () => setSidebarSubmenuOpen({});
 
   useEffect(() => {
     const handleResize = () => {
@@ -26,6 +34,8 @@ export const UiProvider = ({ children }) => {
         setSidebarOpen,
         isSidebarSubmenuOpen,
         setSidebarSubmenuOpen,
+        toggleSubmenu,
+        resetSubmenus,
       }}
     >
       {children}
