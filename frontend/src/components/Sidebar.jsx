@@ -59,11 +59,11 @@ const Sidebar = () => {
                           className="flex justify-between items-center p-2 text-gray-700 rounded-md cursor-pointer hover:bg-gray-100 transition-colors mb-2"
                           onClick={() => toggleSubmenu(route.meta.label)}
                         >
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center">
                             {Icon && (
-                              <Icon size={19} className="text-gray-600" />
+                              <Icon size={18} />
                             )}
-                            <span className=" font-medium">
+                            <span className="ms-3 font-medium">
                               {route.meta.label}
                             </span>
                           </div>
