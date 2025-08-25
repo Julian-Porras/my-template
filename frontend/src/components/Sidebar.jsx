@@ -68,7 +68,7 @@ const Sidebar = () => {
                             </span>
                           </div>
                           <ChevronDown
-                            className={`w-5 h-5 text-gray-500 transform transition-transform duration-200 ${
+                            className={`w-5 h-5 text-gray-500 transform transition-transform duration-100 ${
                               isOpen ? "rotate-180" : ""
                             }`}
                           />
@@ -167,7 +167,7 @@ const Submenu = ({ isOpen, children }) => {
     <div
       ref={ref}
       style={{ height }}
-      className={`ml-4 flex flex-col gap-2 rounded-md bg-gray-100 transition-all duration-200 ease-in-out overflow-hidden ${
+      className={`ml-4 flex flex-col gap-2 rounded-md bg-gray-100 transition-all duration-100 ease-in-out overflow-hidden ${
         isScrollable ? "overflow-y-auto pr-1" : ""
       }`}
     >

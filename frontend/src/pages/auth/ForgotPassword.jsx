@@ -18,11 +18,11 @@ export default function LoginPage() {
           alt="sampleLogo"
           className="w-20 h-20 mx-auto mb-4 rounded-full"
         />
-        <div className="mb-8">
+        <div className="mb-10">
           <p className="text-2xl text-left text-[var(--primary-color)] font-semibold">
-            Login to your account
+            Forgot your password?
           </p>
-          <p className="text-gray-500 text-sm">Please enter your details</p>
+          <p className="text-gray-500 text-sm">Please enter your email address</p>
         </div>
         <form className="flex flex-col gap-4">
           <div className="flex flex-col">
@@ -34,19 +34,10 @@ export default function LoginPage() {
               style={"text-sm py-3"}
             />
           </div>
-          <div className="flex flex-col">
-            <label htmlFor="password">Password</label>
-            <TextField1
-              name={"password"}
-              type="password"
-              placeholder={"Type your password"}
-              style={"text-sm py-3"}
-            />
+          <PrimaryButton label={"Reset Password"} />
+          <div className="text-center text-sm text-[var(--primary-color)] hover:underline">
+            <NavLink to="/login">Back to login</NavLink>
           </div>
-          <div className="text-right text-sm text-[var(--primary-color)] hover:underline">
-            <NavLink to="/forgot">Forgot Password?</NavLink>
-          </div>
-          <PrimaryButton onClick={handleLogin} label={"Login"} />
         </form>
       </Card1>
     </div>

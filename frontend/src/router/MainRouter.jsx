@@ -14,8 +14,8 @@ const SamplePage = lazy(() => import("../pages/Sample"));
 const ButtonsPage = lazy(() => import("../pages/Buttons"));
 const CardsPage = lazy(() => import("../pages/Cards"));
 const SettingsPage = lazy(() => import("../pages/Settings"));
-const NotFound = lazy(() => import("../util/404"));
-const NotPermitted = lazy(() => import("../util/403"));
+const NotFound = lazy(() => import("../pages/errors/404"));
+const NotPermitted = lazy(() => import("../pages/errors/403"));
 
 export const MainRouter = [
   {

@@ -10,7 +10,7 @@ const MainLayout = () => {
       <Header />
       <Sidebar />
       <main
-        className={`flex flex-1 flex-col w-full p-4 pt-16 mt-2 md:mt-1 md:p-8 md:pt-20 scroll-smooth overflow-auto ${
+        className={`flex flex-1 flex-col w-full p-4 pt-16 mt-2 md:mt-1 md:p-8 md:pt-20 scroll-smooth overflow-auto duration-100 ${
           isSidebarOpen ? "md:ml-60" : ""
         }`}
       >
