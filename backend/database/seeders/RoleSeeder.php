@@ -15,10 +15,10 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
 
-        foreach(RoleEnum::cases() as $role) {
+        foreach (RoleEnum::cases() as $role) {
             RoleModel::insert([
-                'id' => $role[0],
-                'role_name' => $role[1],
+                'id'        => $role->id(),
+                'role_name' => $role->label(),
             ]);
         }
     }
